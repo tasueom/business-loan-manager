@@ -49,5 +49,10 @@ def add():
     db.insert_loan(company_name, biz_no, phone, address, loan_amount, term_months, annual_rate, total_repayment)
     return redirect(url_for('index'))
 
+@app.route('/list', methods=['GET'])
+def list():
+    loans = db.get_loans()
+    return render_template('list.html', loans=loans)
+
 if __name__ == '__main__':
     app.run(debug=True)

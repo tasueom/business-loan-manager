@@ -96,6 +96,26 @@ def insert_loan(company_name, biz_no, phone, address, loan_amount, term_months, 
         if conn:
             conn.close()
 
+def get_loans():
+    conn = None
+    cursor = None
+    try:
+        conn = get_conn()
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * FROM {table_name}")
+        return cursor.fetchall()
+    except mysql.connector.Error as err:
+        print(f"Loan retrieval failed: {err}")
+        if conn:
+            conn.rollback()
+        return False
+    finally:
+        # 리소스 정리: 예외 발생 여부와 관계없이 항상 실행
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
 if __name__ == "__main__":
     # 데이터베이스 생성이 성공했을 때만 테이블 생성 시도
     if create_database():
