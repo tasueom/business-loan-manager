@@ -16,12 +16,18 @@ def get_conn():
     return mysql.connector.connect(**base_config, database=DB_NAME)
 
 def create_database():
-    conn = mysql.connector.connect(**base_config)
-    cursor = conn.cursor()
-    cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
-    conn.commit()
-    cursor.close()
-    conn.close()
+    """데이터베이스를 생성하고 성공 여부를 반환합니다."""
+    try:
+        conn = mysql.connector.connect(**base_config)
+        cursor = conn.cursor()
+        cursor.execute(f"CREATE DATABASE IF NOT EXISTS {DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci")
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return True
+    except mysql.connector.Error as err:
+        print(f"Database creation failed: {err}")
+        return False
 
 def create_table():
     conn = get_conn()
@@ -45,11 +51,12 @@ def create_table():
     conn.close()
 
 if __name__ == "__main__":
-    try:
-        create_database()
-    except mysql.connector.Error as err:
-        print(f"Database creation failed: {err}")
-    try:
-        create_table()
-    except mysql.connector.Error as err:
-        print(f"Table creation failed: {err}")
+    # 데이터베이스 생성이 성공했을 때만 테이블 생성 시도
+    if create_database():
+        try:
+            create_table()
+            print("Database and table created successfully!")
+        except mysql.connector.Error as err:
+            print(f"Table creation failed: {err}")
+    else:
+        print("Cannot create table: database creation failed.")
