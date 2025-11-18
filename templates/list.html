@@ -2,6 +2,7 @@
 
 {% block content %}
 <h2>대출 정보 목록</h2>
+<p>전체 {{ total_count }}건</p>
 <a href="{{ url_for('save_excel') }}">Excel 파일로 저장</a>
 <table>
     <thead>
@@ -35,4 +36,25 @@
         {% endfor %}
     </tbody>
 </table>
+
+<!-- 페이징 -->
+{% if total_pages > 1 %}
+<div class="pagination">
+    {% if page > 1 %}
+    <a href="{{ url_for('list', page=page-1) }}">이전</a>
+    {% endif %}
+    
+    {% for p in range(1, total_pages + 1) %}
+        {% if p == page %}
+        <span class="current-page">{{ p }}</span>
+        {% else %}
+        <a href="{{ url_for('list', page=p) }}">{{ p }}</a>
+        {% endif %}
+    {% endfor %}
+    
+    {% if page < total_pages %}
+    <a href="{{ url_for('list', page=page+1) }}">다음</a>
+    {% endif %}
+</div>
+{% endif %}
 {% endblock %}

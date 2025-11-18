@@ -50,8 +50,19 @@ def add():
 
 @app.route('/list', methods=['GET'])
 def list():
-    loans = db.get_loans()
-    return render_template('list.html', loans=loans)
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+    
+    total_count = db.get_loans_count()
+    total_pages = (total_count + per_page - 1) // per_page  # 올림 계산
+    
+    loans = db.get_loans_paginated(page, per_page)
+    
+    return render_template('list.html', 
+                          loans=loans, 
+                          page=page, 
+                          total_pages=total_pages,
+                          total_count=total_count)
 
 @app.route('/chart', methods=['GET'])
 def chart():

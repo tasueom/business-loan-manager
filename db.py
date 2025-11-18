@@ -117,6 +117,46 @@ def get_loans():
         if conn:
             conn.close()
 
+def get_loans_count():
+    """전체 대출 정보 개수를 반환합니다."""
+    conn = None
+    cursor = None
+    try:
+        conn = get_conn()
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
+        result = cursor.fetchone()
+        return result[0] if result else 0
+    except mysql.connector.Error as err:
+        print(f"Loan count retrieval failed: {err}")
+        return 0
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+def get_loans_paginated(page=1, per_page=10):
+    """페이징된 대출 정보를 조회하고 리스트를 반환합니다."""
+    conn = None
+    cursor = None
+    try:
+        conn = get_conn()
+        cursor = conn.cursor()
+        offset = (page - 1) * per_page
+        cursor.execute(f"SELECT * FROM {table_name} ORDER BY id DESC LIMIT %s OFFSET %s", (per_page, offset))
+        return cursor.fetchall()
+    except mysql.connector.Error as err:
+        print(f"Paginated loan retrieval failed: {err}")
+        if conn:
+            conn.rollback()
+        return []
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
 if __name__ == "__main__":
     # 데이터베이스 생성이 성공했을 때만 테이블 생성 시도
     if create_database():
