@@ -3,6 +3,8 @@ import os
 from PIL import Image
 import re
 from io import BytesIO
+import pandas as pd
+import db
 
 # Tesseract 실행 파일 경로, 아래 구문은 항상 나와야함
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
@@ -102,3 +104,17 @@ def prepare_chart_data(rows):
         chart_data['tooltips'].append(tooltip)
     
     return chart_data
+
+def upload_csv(file):
+    csv_data = pd.read_csv(file, encoding='utf-8-sig')
+    for row in csv_data.itertuples(index=False):
+        company_name = row.회사명
+        biz_no = row.사업자등록번호
+        phone = row.연락처
+        address = row.주소
+        loan_amount = int(row.대출금액)
+        term_months = int(row.대출기간)
+        annual_rate = float(row.연이율)
+        total_repayment = calculate_total_repayment(loan_amount, term_months, annual_rate)
+        db.insert_loan(company_name, biz_no, phone, address, loan_amount, term_months, annual_rate, total_repayment)
+    print("CSV 파일 업로드 완료")

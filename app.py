@@ -64,5 +64,14 @@ def chart():
     chart_data_json = json.dumps(chart_data, ensure_ascii=False)
     return render_template('chart.html', chart_data_json=chart_data_json)
 
+@app.route('/upload_csv', methods=['GET', 'POST'])
+def upload_csv():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file:
+            service.upload_csv(file)
+            return redirect(url_for('list'))
+    return render_template('upload_csv.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
