@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, send_file
 import service
 import db
-import base64
 import json
 
 app = Flask(__name__)
@@ -25,9 +24,8 @@ def upload():
             biz_no = result['biz_no']
             image_file = result['image_file']  # BytesIO 객체
             
-            # 이미지를 base64로 인코딩하여 HTML에 표시 가능하게 함
-            image_file.seek(0)
-            image_base64 = base64.b64encode(image_file.read()).decode('utf-8')
+            # 이미지를 base64로 인코딩
+            image_base64 = service.encode_image_to_base64(image_file)
             
             return render_template('upload.html',
                                     company_name=company_name,

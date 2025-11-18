@@ -5,6 +5,7 @@ import re
 from io import BytesIO
 import pandas as pd
 import db
+import base64
 
 # Tesseract 실행 파일 경로, 아래 구문은 항상 나와야함
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
@@ -73,6 +74,11 @@ def extract_business_info(file):
         'biz_no': biz_no,
         'image_file': img_byte_arr
     }
+
+def encode_image_to_base64(image_file):
+    """BytesIO 이미지 파일을 base64 문자열로 인코딩합니다."""
+    image_file.seek(0)
+    return base64.b64encode(image_file.read()).decode('utf-8')
 
 def calculate_total_repayment(loan_amount, term_months, annual_rate):
     return int(loan_amount * ((1 + annual_rate / 100) ** (term_months / 12)))
