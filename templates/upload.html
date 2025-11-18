@@ -8,16 +8,16 @@
         <h3>등록하기</h3>
         <form method="post" action="{{ url_for('add')}}">
             <label>회사명:</label>
-            <input type="text" name="company_name" value="{{ company_name or '' }}" required><br><br>
+            <input type="text" name="company_name" value="{{ company_name }}" required><br><br>
             
             <label>주소:</label>
-            <input type="text" name="address" value="{{ address or '' }}"><br><br>
+            <input type="text" name="address" value="{{ address }}"><br><br>
             
             <label>연락처:</label>
-            <input type="text" name="phone" value="{{ phone or '' }}"><br><br>
+            <input type="text" name="phone" value="{{ phone }}"><br><br>
             
             <label>사업자 등록번호:</label>
-            <input type="text" name="biz_no" value="{{ biz_no or '' }}" required><br><br>
+            <input type="text" name="biz_no" value="{{ biz_no }}" required><br><br>
             
             <label>대출 금액:</label>
             <input type="number" name="loan_amount" min="0" required><br><br>
