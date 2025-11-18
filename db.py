@@ -97,6 +97,7 @@ def insert_loan(company_name, biz_no, phone, address, loan_amount, term_months, 
             conn.close()
 
 def get_loans():
+    """모든 대출 정보를 조회하고 리스트를 반환합니다."""
     conn = None
     cursor = None
     try:
@@ -108,7 +109,7 @@ def get_loans():
         print(f"Loan retrieval failed: {err}")
         if conn:
             conn.rollback()
-        return False
+        return []  # 실패 시 빈 리스트 반환 (템플릿에서 반복 가능하도록)
     finally:
         # 리소스 정리: 예외 발생 여부와 관계없이 항상 실행
         if cursor:
