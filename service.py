@@ -74,3 +74,31 @@ def extract_business_info(file):
 
 def calculate_total_repayment(loan_amount, term_months, annual_rate):
     return int(loan_amount * ((1 + annual_rate / 100) ** (term_months / 12)))
+
+def prepare_chart_data(rows):
+    """대출 정보 리스트를 차트용 데이터 구조로 변환합니다."""
+    chart_data = {
+        'labels': [],  # x 라벨 (ID)
+        'values': [],  # y 라벨 (총 상환액)
+        'tooltips': []  # 툴팁 정보 (회사명, 주소, 연락처, 사업자번호 등)
+    }
+    
+    for row in rows:
+        # row 구조: (id, company_name, biz_no, phone, address, loan_amount, term_months, annual_rate, total_repayment, created_at)
+        chart_data['labels'].append(str(row[0]))  # ID를 문자열로
+        chart_data['values'].append(int(row[8]) if row[8] else 0)  # 총 상환액 (숫자로 변환)
+        
+        # 툴팁 정보 딕셔너리
+        tooltip = {
+            'company_name': row[1] or '',
+            'biz_no': row[2] or '',
+            'phone': row[3] or '',
+            'address': row[4] or '',
+            'loan_amount': row[5] or 0,
+            'term_months': row[6] or 0,
+            'annual_rate': float(row[7]) if row[7] else 0.0,
+            'created_at': str(row[9]) if row[9] else ''
+        }
+        chart_data['tooltips'].append(tooltip)
+    
+    return chart_data
