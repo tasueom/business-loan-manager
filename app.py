@@ -59,10 +59,10 @@ def list():
     loans = db.get_loans_paginated(page, per_page)
     
     return render_template('list.html', 
-                          loans=loans, 
-                          page=page, 
-                          total_pages=total_pages,
-                          total_count=total_count)
+                            loans=loans, 
+                            page=page, 
+                            total_pages=total_pages,
+                            total_count=total_count)
 
 @app.route('/chart', methods=['GET'])
 def chart():
