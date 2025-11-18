@@ -118,3 +118,18 @@ def upload_csv(file):
         total_repayment = calculate_total_repayment(loan_amount, term_months, annual_rate)
         db.insert_loan(company_name, biz_no, phone, address, loan_amount, term_months, annual_rate, total_repayment)
     print("CSV 파일 업로드 완료")
+
+def create_excel_file(loans):
+    """대출 정보 리스트를 Excel 파일로 변환하여 BytesIO로 반환합니다."""
+    # 데이터프레임 생성
+    df = pd.DataFrame(loans, columns=[
+        'ID', '회사명', '사업자등록번호', '연락처', '주소', 
+        '대출금액', '대출기간', '연이율', '총상환액', '등록일시'
+    ])
+    
+    # Excel 파일을 BytesIO에 저장
+    excel_buffer = BytesIO()
+    df.to_excel(excel_buffer, index=False, engine='openpyxl')
+    excel_buffer.seek(0)
+    
+    return excel_buffer

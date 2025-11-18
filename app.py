@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 import service
 import db
 import base64
@@ -72,6 +72,17 @@ def upload_csv():
             service.upload_csv(file)
             return redirect(url_for('list'))
     return render_template('upload_csv.html')
+
+@app.route('/save_excel', methods=['GET'])
+def save_excel():
+    loans = db.get_loans()
+    excel_file = service.create_excel_file(loans)
+    return send_file(
+        excel_file,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        as_attachment=True,
+        download_name='대출정보.xlsx'
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
