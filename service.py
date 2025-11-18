@@ -71,3 +71,6 @@ def extract_business_info(file):
         'biz_no': biz_no,
         'image_file': img_byte_arr
     }
+
+def calculate_total_repayment(loan_amount, term_months, annual_rate):
+    return int(loan_amount * ((1 + annual_rate / 100) ** (term_months / 12)))

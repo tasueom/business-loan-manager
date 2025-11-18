@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import service
+import db
 import base64
 
 app = Flask(__name__)
@@ -34,6 +35,19 @@ def upload():
                                     biz_no=biz_no,
                                     image_base64=image_base64)
     return render_template('upload.html')
+
+@app.route('/add', methods=['POST'])
+def add():
+    company_name = request.form['company_name']
+    address = request.form['address']
+    phone = request.form['phone']
+    biz_no = request.form['biz_no']
+    loan_amount = int(request.form['loan_amount'])
+    term_months = int(request.form['term_months'])
+    annual_rate = float(request.form['annual_rate'])
+    total_repayment = service.calculate_total_repayment(loan_amount, term_months, annual_rate)
+    db.insert_loan(company_name, biz_no, phone, address, loan_amount, term_months, annual_rate, total_repayment)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

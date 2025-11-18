@@ -19,7 +19,7 @@
     <aside>
         {% if image_base64 %}
         <h3>등록하기</h3>
-        <form method="post" action="#">
+        <form method="post" action="{{ url_for('add')}}">
             <label>회사명:</label>
             <input type="text" name="company_name" value="{{ company_name }}" required><br><br>
             
@@ -35,10 +35,10 @@
             <label>대출 금액:</label>
             <input type="number" name="loan_amount" min="0" required><br><br>
             
-            <label>대출 기간:</label>
+            <label>대출 기간(개월):</label>
             <input type="number" name="term_months" min="1" required><br><br>
             
-            <label>대출 금리:</label>
+            <label>연 이율:</label>
             <input type="number" name="annual_rate" step="0.01" min="0" required><br><br>
             
             <button type="submit">등록</button>
