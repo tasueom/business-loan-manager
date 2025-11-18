@@ -86,7 +86,9 @@ business-loan-manager/
 ├── db.py                  # MySQL 데이터베이스 연결 및 쿼리 함수
 ├── service.py             # OCR, 계산, 파일 처리 등 비즈니스 로직
 ├── README.md              # 프로젝트 문서
-├── sample.csv             # CSV 업로드 샘플 파일
+├── samples/               # 샘플 데이터 폴더
+│   ├── sample.csv         # CSV 업로드 샘플 파일
+│   └── samle_image.png    # OCR 테스트용 샘플 이미지
 ├── static/
 │   ├── style.css          # 스타일시트
 │   └── chart.js           # Chart.js 라이브러리
@@ -120,6 +122,8 @@ CSV 파일은 다음 컬럼을 포함해야 합니다:
 - 대출금액
 - 대출기간 (개월)
 - 연이율 (%)
+
+> 💡 샘플 CSV 파일은 `samples/sample.csv`에서 확인할 수 있습니다.
 
 ## 데이터베이스 스키마
 
