@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>대출 상환액 차트</h2>
+<div class="chart-container">
+    <canvas id="loan-chart"></canvas>
+</div>
+
+<!-- 차트 데이터를 data attribute로 전달 -->
+<div id="chart-data" data-chart="{{ chart_data_json }}" style="display: none;"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='chart.js') }}"></script>
+{% endblock %}

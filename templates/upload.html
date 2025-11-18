@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<main>
+    <h2>사업자 정보 등록</h2>
+    
+    <div>
+        <h3>등록하기</h3>
+        <form method="post" action="{{ url_for('add')}}">
+            <label>회사명:</label>
+            <input type="text" name="company_name" value="{{ company_name }}" required><br><br>
+            
+            <label>주소:</label>
+            <input type="text" name="address" value="{{ address }}"><br><br>
+            
+            <label>연락처:</label>
+            <input type="text" name="phone" value="{{ phone }}"><br><br>
+            
+            <label>사업자 등록번호:</label>
+            <input type="text" name="biz_no" value="{{ biz_no }}" required><br><br>
+            
+            <label>대출 금액:</label>
+            <input type="number" name="loan_amount" min="0" required><br><br>
+            
+            <label>대출 기간(개월):</label>
+            <input type="number" name="term_months" min="1" required><br><br>
+            
+            <label>연 이율:</label>
+            <input type="number" name="annual_rate" step="0.01" min="0" required><br><br>
+            
+            <button type="submit">등록</button>
+        </form>
+    </div>
+    
+    <aside>
+        <h3>명함 이미지로 정보 추출</h3>
+        <p>명함 이미지를 업로드하여 정보를 자동으로 추출할 수 있습니다.</p>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".jpg,.jpeg,.png" required><br>
+            <button type="submit">추출</button>
+        </form>
+        
+        {% if image_base64 %}
+        <h3>업로드된 이미지</h3>
+        <img src="data:image/png;base64,{{ image_base64 }}" alt="업로드된 이미지" style="max-width: 500px; margin-bottom: 20px;">
+        {% endif %}
+    </aside>
+</main>
+{% endblock %}

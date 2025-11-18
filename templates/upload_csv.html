@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>CSV 파일 업로드</h2>
+<form method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".csv" required><br>
+    <button type="submit">업로드</button>
+</form>
+{% endblock %}
