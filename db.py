@@ -30,33 +30,46 @@ def create_database():
         return False
 
 def create_table():
-    conn = get_conn()
-    cursor = conn.cursor()
-    cursor.execute(f"""
-                    CREATE TABLE IF NOT EXISTS {table_name} (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    company_name VARCHAR(100) NOT NULL,
-                    biz_no VARCHAR(20) NOT NULL,
-                    phone VARCHAR(20),
-                    address VARCHAR(200),
-                    loan_amount BIGINT NOT NULL,
-                    term_months INT NOT NULL,
-                    annual_rate DECIMAL(5,2) NOT NULL,
-                    total_repayment BIGINT NOT NULL,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                    )
-                """)
-    conn.commit()
-    cursor.close()
-    conn.close()
+    """테이블을 생성하고 성공 여부를 반환합니다."""
+    conn = None
+    cursor = None
+    try:
+        conn = get_conn()
+        cursor = conn.cursor()
+        cursor.execute(f"""
+                        CREATE TABLE IF NOT EXISTS {table_name} (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        company_name VARCHAR(100) NOT NULL,
+                        biz_no VARCHAR(20) NOT NULL,
+                        phone VARCHAR(20),
+                        address VARCHAR(200),
+                        loan_amount BIGINT NOT NULL,
+                        term_months INT NOT NULL,
+                        annual_rate DECIMAL(5,2) NOT NULL,
+                        total_repayment BIGINT NOT NULL,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                        )
+                    """)
+        conn.commit()
+        return True
+    except mysql.connector.Error as err:
+        print(f"Table creation failed: {err}")
+        if conn:
+            conn.rollback()
+        return False
+    finally:
+        # 리소스 정리: 예외 발생 여부와 관계없이 항상 실행
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
 
 if __name__ == "__main__":
     # 데이터베이스 생성이 성공했을 때만 테이블 생성 시도
     if create_database():
-        try:
-            create_table()
+        if create_table():
             print("Database and table created successfully!")
-        except mysql.connector.Error as err:
-            print(f"Table creation failed: {err}")
+        else:
+            print("Table creation failed.")
     else:
         print("Cannot create table: database creation failed.")
